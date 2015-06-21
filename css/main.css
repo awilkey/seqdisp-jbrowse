@@ -1,0 +1,36 @@
+.disp-container{
+		
+		height: 30em;
+		width: 50em;
+}
+
+.upstream-div{
+		margin: 10px 0px 10px 0px;
+}
+
+#tab-cont{
+	margin-top: 10px;
+}
+
+#ref-table {
+	margin: 15px;
+	padding: 5px;
+}
+
+#ref-table th{
+		padding: 10px 20px 10px 10px
+}
+
+#ref-table td{
+		padding: 10px;
+}
+
+.seq-pane {
+	margin: 15px;
+	font-family:monospace;
+   	height:20em;	
+	overflow-y: auto;
+}
+.seq-pane span{
+		background-color:#d3d3d3;
+}
