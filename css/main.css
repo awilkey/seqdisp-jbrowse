@@ -1,5 +1,5 @@
 .disp-container{
-		height: 35em;
+		height: 36em;
 		width: 50em;
 }
 
@@ -32,4 +32,9 @@
 }
 .seq-pane span{
 		background-color:#d3d3d3;
+}
+
+.options-table-valueCell{
+	padding-left: 3em;
+	width: 12em;
 }

@@ -21,7 +21,7 @@ var currentFeature = {
 
 	revComp : function(sequence){
 		var rev = sequence.split('');
-		console.log(rev.length);
+		//console.log(rev.length);
 		for(i=0; i < rev.length; i++){
 				rev[i]=sequence.charAt(i).replace(/[ACGTUNWSMKRYBDHV]/ig,function(c){
 						return {"A":"T","C":"G","G":"C","T":"A","U":"A",

@@ -12,7 +12,7 @@ function SeqDisp(track, feature, div){
 	feat = currentFeature.init(track, feature, div);
 
     var dispContainer =  dojo.create('div',{id:'disp-container',className:'disp-container', innerHTML:''});
-	var basicControl = dojo.create('div',{id:'basic-cont',className:'control-div',innerHTML:'options:'},dispContainer);
+	var basicControl = dojo.create('div',{id:'basic-cont',className:'control-div',innerHTML:''},dispContainer);
 	
 	populateOptions(basicControl);
 
@@ -35,10 +35,10 @@ function populateOptions(optionsDiv){
 	function(dom,domConstruct,parser,TableContainer){
 
 		var optionsTable = new TableContainer({
-								customClass:"options-table",
-								showLabels:true,
-								cols:2
-							});
+			customClass:"options-table",
+			showLabels:true,
+			cols:2
+		});
 		
 		var upSpin = makeSpinner("upstream");
 		var upVis = makeTabSelect("upstream");
@@ -363,10 +363,13 @@ function formatSequence(sequence,upstream,downstream){
 	var usbreak = (Math.floor(us/linew)*4)+us;
 	var dsbreak = (feat.end-feat.start+us)+(Math.floor((feat.end-feat.start+us)/linew)*4);
 	var bodylen = dsbreak-usbreak;
-	
-    var upSeq = formattedSeq.slice(0,usbreak);
+
+
+	var upSeq = formattedSeq.slice(0,usbreak);
 	var downSeq =  ds > 0 ?  sequence.slice((sequence.length-ds)).match(re).join('<br>') : '';
 	
+//	console.log("before fasta"+upSeq+" ud "+downSeq);
+
 	var finalSeq = "<span className='stream-reg'>"+formattedSeq.slice(0,usbreak)+
 			'</span>'+formattedSeq.slice(usbreak,dsbreak)+
 			"<span className='stream-reg'>"+formattedSeq.slice(dsbreak)+'</span>';
@@ -423,6 +426,8 @@ function formatSequence(sequence,upstream,downstream){
 			upSeq = downSeq;
 			downSeq = revSeq;
 	}
+
+//	console.log("after: " + upSeq + " ud " + downSeq);
 	
 	return {seq:finalSeq, up:upSeq, down:downSeq};
 }
