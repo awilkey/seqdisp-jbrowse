@@ -1,4 +1,3 @@
-dojo.require("dojo.dom-style");
 
 /*
  * Initializer and makes the DOM object that is the sequence display
@@ -47,6 +46,7 @@ function populateOptions(optionsDiv){
 		var downVis = makeTabSelect("downstream");
 		var formatSelect = makeSelectFormat();
 		var revCompSelect = makeRevSelect();
+		var baseSpin = makeBaseSpin();		
 
 		optionsTable.addChild(upSpin);
 		optionsTable.addChild(upVis);
@@ -54,6 +54,7 @@ function populateOptions(optionsDiv){
 		optionsTable.addChild(downVis);
 		optionsTable.addChild(formatSelect);
 		optionsTable.addChild(revCompSelect);
+		optionsTable.addChild(baseSpin);
 
 		optionsTable.placeAt(optionsContainer);
 		
@@ -63,6 +64,7 @@ function populateOptions(optionsDiv){
 		downVis.startup();
 		formatSelect.startup();
 		revCompSelect.startup();
+		baseSpin.startup();
 		optionsTable.startup();
 	});
 	
@@ -112,6 +114,35 @@ function makeSpinner(stream){
 	});
 
 	return streamSpin;
+}
+
+/*
+ * Lets users decide how many bases they wish per line
+ *
+ */
+
+function makeBaseSpin(){
+	var baseSpin;
+	
+	var spinner =	require(["dojo/dom","dojo/dom-construct","dojo/parser","dojox/layout/TableContainer","dijit/form/NumberSpinner","dojo/domReady!"],
+	function(dom,domConstruct,parser,TableContainer,NumberSpinner){
+	
+		baseSpin = new NumberSpinner({
+			value:40,
+			smallDelta:5,
+			title:"Bases per line:",
+			intermediateChanges: true,
+			constraints:{min:1,max:80},
+			id:"base-spin",
+			style:'width:3em;',
+			onChange: function(){
+					updateSeq(false);	
+			}
+		});
+		
+	});
+
+	return baseSpin;
 }
 
 /*
@@ -288,21 +319,7 @@ function makeSelectFormat(){
 
 			onChange: function(){
 					
-					var upstream=0;
-					var downstream=0;
-					var seqCont;	
-					
-					if(feat.strand === -1){
-							upstream = feat.downstream;
-							downstream = feat.upstream;
-					} else {
-							upstream = feat.upstream;
-							downstream = feat.downstream;
-					}
-
-					feat.getSeq(upstream,downstream).then(function(){
-						updateSeq(false);
-					});
+					updateSeq(false);
 				}
 			});
 		}
@@ -329,7 +346,7 @@ function formatSequence(sequence,upstream,downstream){
 	var format = dijit.byId("form-select").get('value');
 	var strand = feat.strand === 1 ? '+ strand' : '- strand';
 	
-	var linew = 45;
+	var linew = dijit.byId("base-spin").get('value');
 	var re = new RegExp(".{"+linew+"}|.{1,"+(linew-1)+"}","g");
 	var rev = dijit.byId('rc-select').get('value');
 	var dir = feat.strand === -1 ? true : false;
