@@ -11,10 +11,12 @@ Configure the right-click menu for the track you wish to add this plugin to:
 (See: http://gmod.org/wiki/JBrowse_Configuration_Guide#Customizing_Right-click_Context_Menus )
 
 ### Example config for tracks.conf format
+```
 menuTemplate += json:{"label" : "View details"}
 menuTemplate += json:{"label" : "Zoom to this transcript"} 
 menuTemplate += json:{"label" : "Highlight this transcript"} 
 menuTemplate += json:{"label" : "Sequence Viewer", "title" : "Sequence Viewer", "iconClass" : "dijitIconDatabase","action": "contentDialog","content" : "function(track,feature,div){return SeqDisp(track,feature,div);}"}
+```
 
 The plugin should now work
 
