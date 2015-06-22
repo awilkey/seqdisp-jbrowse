@@ -105,7 +105,7 @@ function makeSpinner(stream){
 					var filler = (isNaN(value) || value < 0) ? 0 : me.getValue();
 
 					feat[stream] = filler;
-					updateSeq();	
+					updateSeq(true);	
 				});
 			}
 		});
@@ -120,9 +120,13 @@ function makeSpinner(stream){
  *
  */
 
-function updateSeq(){
+function updateSeq(update){
 		var upstream = 0;
 		var downstream = 0;
+		
+		var seqpane = dijit.byId("seq-pane");
+		var uppane = dijit.byId("upstream-tab");
+		var downpane = dijit.byId("downstream-tab");
 
 		if(feat.strand === -1){
 			upstream = feat.downstream;
@@ -132,15 +136,22 @@ function updateSeq(){
 			downstream = feat.downstream;
 		}
 		
-		feat.getSeq(upstream,downstream).then(function(){
-		var seqpane = dijit.byId("seq-pane");
-		var uppane = dijit.byId("upstream-tab");
-		var downpane = dijit.byId("downstream-tab");
-        seqCont= formatSequence(feat.seq,upstream,downstream);
-    	seqpane.set("content",seqCont.seq);
-    	uppane.set("content",seqCont.up);
-    	downpane.set("content",seqCont.down);
-	});
+		if (update){
+		
+			feat.getSeq(upstream,downstream).then(function(){
+        		seqCont= formatSequence(feat.seq,upstream,downstream);
+    			seqpane.set("content",seqCont.seq);
+    			uppane.set("content",seqCont.up);
+    			downpane.set("content",seqCont.down);
+			});
+		
+		} else {
+        	
+			seqCont= formatSequence(feat.seq,upstream,downstream);
+    		seqpane.set("content",seqCont.seq);
+    		uppane.set("content",seqCont.up);
+    		downpane.set("content",seqCont.down);
+		}
 }
 
 /*
@@ -249,7 +260,7 @@ function makeRevSelect(){
 			label: 'Reverse complement: ',
 			checked: false,
 			onChange: function(){
-				updateSeq();
+				updateSeq(false);
 			}
 		});
 	});
@@ -290,7 +301,7 @@ function makeSelectFormat(){
 					}
 
 					feat.getSeq(upstream,downstream).then(function(){
-						updateSeq();
+						updateSeq(false);
 					});
 				}
 			});
@@ -318,6 +329,8 @@ function formatSequence(sequence,upstream,downstream){
 	var format = dijit.byId("form-select").get('value');
 	var strand = feat.strand === 1 ? '+ strand' : '- strand';
 	
+	var linew = 45;
+	var re = new RegExp(".{"+linew+"}|.{1,"+(linew-1)+"}","g");
 	var rev = dijit.byId('rc-select').get('value');
 	var dir = feat.strand === -1 ? true : false;
 
@@ -327,15 +340,15 @@ function formatSequence(sequence,upstream,downstream){
 		ds = upstream;
 	}	
 
-	formattedSeq = sequence.match(/.{40}|.{1,39}/g);
+	formattedSeq = sequence.match(re);
 	formattedSeq = formattedSeq.join('<br>');
 	
-	var usbreak = (Math.floor(us/40)*4)+us;
-	var dsbreak = (feat.end-feat.start+us)+(Math.floor((feat.end-feat.start+us)/40)*4);
+	var usbreak = (Math.floor(us/linew)*4)+us;
+	var dsbreak = (feat.end-feat.start+us)+(Math.floor((feat.end-feat.start+us)/linew)*4);
 	var bodylen = dsbreak-usbreak;
 	
     var upSeq = formattedSeq.slice(0,usbreak);
-	var downSeq =  ds > 0 ?  sequence.slice((sequence.length-ds)).match(/.{40}|.{1,39}/g).join('<br>') : '';
+	var downSeq =  ds > 0 ?  sequence.slice((sequence.length-ds)).match(re).join('<br>') : '';
 	
 	var finalSeq = "<span className='stream-reg'>"+formattedSeq.slice(0,usbreak)+
 			'</span>'+formattedSeq.slice(usbreak,dsbreak)+
