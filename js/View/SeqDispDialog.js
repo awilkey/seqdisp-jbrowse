@@ -350,11 +350,14 @@ function formatSequence(sequence,upstream,downstream){
 	var re = new RegExp(".{"+linew+"}|.{1,"+(linew-1)+"}","g");
 	var rev = dijit.byId('rc-select').get('value');
 	var dir = feat.strand === -1 ? true : false;
+	
+	var seqEnd = feat.end;	
 
 	if(!dir != !rev){
 		sequence = feat.revComp(sequence);
 		us = ds;
 		ds = upstream;
+
 	}	
 
 	formattedSeq = sequence.match(re);
@@ -392,7 +395,6 @@ function formatSequence(sequence,upstream,downstream){
 				upInfo += '(' + strand + ') '+us+'bp <br>';
 
 				if(rev){
-					revSeq = upSeq; 
 					upSeq = upInfo + downSeq;
 				} else {
 					upSeq = upInfo + upSeq;
