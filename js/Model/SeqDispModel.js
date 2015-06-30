@@ -1,6 +1,7 @@
 var currentFeature = {
  	init: function ( track,feature,div ){
 		this.id= feature.get('id');
+		this.name = feature.get('name');
 		this.start = feature.get('start');
 		this.end = feature.get('end');
 		this.strand = feature.get('strand');

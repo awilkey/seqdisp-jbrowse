@@ -442,7 +442,7 @@ function formatSequence(sequence,upstream,downstream){
 
 function refTable(){
 	var strand = feat.strand === -1 ? 'reverse strand' : 'forward strand';
-	var table = '<table border="1" id="ref-table"> <tr><th>Name</th><td>' + feat.id + '</td></tr>'+
+	var table = '<table border="1" id="ref-table"> <tr><th>Name</th><td>' + feat.name + '</td></tr>'+
 			    '<tr><th>Type</th><td>' + feat.type + '</td></tr>'+
 				'<tr><th>Location</th><td>' + feat.loc + '</td></tr>'+
 				'<tr><th>Strand</th><td>' + strand + '</td></tr></table>';
