@@ -219,7 +219,7 @@ function makeTabs(tabCont){
 	
 			tc.addChild(new ContentPane({
 				id:"ref-pane",
-        		title: "Refrence Infomation",
+        		title: "Reference Information",
         		style:"height:80%",
 				content:refTable(),
 	   		}));
